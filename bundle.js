@@ -114,27 +114,43 @@ createMatrix = (width, height) => {
 bottle = createMatrix(8, 16)
 console.log(bottle); console.table(bottle)
 
+//offsets for moving graphics and logic
+const bottleOffset = {
+  x: 3,
+  y: 3,
+}
 
-// logical 2d matrix of pill
-const matrix = [
-  [1, 0],
-  [1, 0],
+//position of spout on bottle
+const bottleSpout = {
+  x: 3,
+  y: -1,
+}
+
+// logical 2d matrix of pill with room to rotate
+const pillMatrix = [
+  [0, 1, 0],
+  [0, 1, 0],
+  [0, 0, 0],
 ]
 
 //paramaters of player's pill and its logical shape/orientation
 const player = { 
-  pos: {x: 5, y: 5},
-  matrix: matrix
+  pos: {x: 2, y: -1}, //starting position of pill
+  pill: pillMatrix
 }
 
 draw = () => {
   context.fillStyle = '#000' //black
   context.fillRect(0, 0, canvas.width, canvas.height) //background based on index.html
   context.fillStyle = '#55f' //blue
-  context.fillRect(2, 2, 8, 16) //spout
+  context.fillRect(0 + bottleOffset.x, 0 + bottleOffset.y, 8, 16) //bottle
   context.fillStyle = '#55f' //blue
-  context.fillRect(5, 1, 2, 1) //bottle
-  drawMatrix(player.matrix, player.pos) //draws shape based on position
+  context.fillRect(
+    bottleSpout.x + bottleOffset.x,
+    bottleSpout.y + bottleOffset.y,
+    2, 1) //spout
+  drawMatrix(bottle, { x: 0, y: 0}) //draw any spaces that exist in logic
+  drawMatrix(player.pill, player.pos) //draws shape based on position
 
 }
 
@@ -145,10 +161,10 @@ drawMatrix = (matrix, offset) => {
       if (value !== 0) {
         context.fillStyle = 'red'
         context.fillRect(
-          x + offset.x,
-          y + offset.y,
-          1,
-          1
+          x + offset.x + bottleOffset.x, //position x
+          y + offset.y + bottleOffset.y, //position y
+          1, //1 unit(px) wide
+          1  //1 unit(px) high
         )
       }
     })
@@ -157,7 +173,7 @@ drawMatrix = (matrix, offset) => {
 
 //based on matrix
 merge = (bottle, player) => {
-  player.matrix.forEach((row, y) => {
+  player.pill.forEach((row, y) => {
     row.forEach((value, x) => {
       if (value !== 0) {
         bottle[y + player.pos.y][x + player.pos.x] = value
@@ -168,11 +184,11 @@ merge = (bottle, player) => {
 
 // drape over bottle and check if player's piece collides
 collide = (bottle, player) => {
-  const [matrix, offset] = [player.matrix, player.pos]
-  for (let y = 0; y < matrix.length; ++y) {
-    for (let x = 0; x < matrix[y].length; ++x) {
+  const [pill, offset] = [player.pill, player.pos]
+  for (let y = 0; y < pill.length; ++y) { //add y first to check next pos
+    for (let x = 0; x < pill[y].length; ++x) { //add x first to check next pos
       if (
-        matrix[y][x] !== 0 && // if matrix shape exists in space...
+        pill[y][x] !== 0 && // if pill shape exists in space...
         (
           bottle[y + offset.y] && // check if bottle row exists then...
           bottle[y + offset.y][x + offset.x] // check if collumn exists...
@@ -189,16 +205,20 @@ let dropCounter = 0
 let dropInterval = 1000 // 1000ms = 1s
 let lastTime = 0 
 
+resetPillPosition = () => {
+  player.pos.x = bottleSpout.x
+  player.pos.y = bottleSpout.y
+}
+
 pillDrop = () => {
   player.pos.y++
   if (collide(bottle, player)) {
     player.pos.y--
     merge(bottle, player)
-    player.pos.y = 0
+    resetPillPosition()
     console.table(bottle)
   }
   dropCounter = 0
-
 }
 
 //Define Game Loop
@@ -212,24 +232,61 @@ update = (time = 0) => {
   if (dropCounter > dropInterval) {
     pillDrop()
   }
-
   // console.log(deltaTime)
-
   draw() //draw or rather re-draw
   requestAnimationFrame(update) //recursive loop -- never ends
 }
 
+playerMove = (dir) => {
+  player.pos.x += dir
+  if (collide(bottle, player)) {
+    player.pos.x -= dir
+  }
+}
+
+rotate = (matrix, dir) => {
+  for (let y = 0; y < matrix.length; ++y) {
+    for (let x = 0; x < y; ++x) {
+      [
+        matrix[x][y],
+        matrix[y][x]
+      ] = [
+        matrix[y][x],
+        matrix[x][y]
+      ]
+    }
+    if (dir > 0) {
+      matrix.forEach(row => row.reverse())
+    } else {
+      matrix.reverse()
+    }
+  }
+}
+
+playerRotate = (dir) => {
+  rotate(player.pill, dir)
+}
+
 //Pill position manipulation
 document.addEventListener('keydown', event => {
-  switch (event.key) {
+  console.log(event)
+  switch (event.code) {
     case "ArrowLeft":
-      player.pos.x--
+      playerMove(-1)
       break
     case "ArrowRight":
-      player.pos.x++
+      playerMove(+1)
       break
     case "ArrowDown":
       pillDrop()
+      break
+    case "KeyD":
+      playerRotate(-1)
+      break
+    case "KeyF":
+      playerRotate(1)
+      break
+    case "Space": //to be used
       break
   }
 })
