@@ -1,5 +1,5 @@
-<link href="https://github.com/TORTO21/PharmacistZenny/blob/master/PharmZenny.css" rel="stylesheet"></link>
-<!-- <article class="markdown-body"> -->
+<link href="https://raw.githubusercontent.com/TORTO21/PharmacistZenny/master/PharmZenny.css" rel="stylesheet"></link>
+
 # Pharmacist Zenny
 
 Growing up, Dr. Mario was one of my favorite games.  I often joked with my sister that it would be funny to replace Mario with my mom and have her throw the pills. Et Voilà.
