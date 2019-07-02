@@ -1,4 +1,4 @@
-<link href="https://raw.githubusercontent.com/TORTO21/PharmacistZenny/master/PharmZenny.css" rel="stylesheet"></link>
+<link href="https://torto21.github.io/PharmacistZenny/PharmZenny.css" rel="stylesheet"></link>
 
 # <span>Pharmacist Zenny</span>
 
