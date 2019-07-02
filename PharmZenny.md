@@ -1,5 +1,4 @@
 <link href="https://torto21.github.io/PharmacistZenny/PharmZenny.css" rel="stylesheet"></link>
-<!-- <link href="PharmZenny.css" rel="stylesheet"></link> -->
 
 # **Pharmacist Zenny**
 

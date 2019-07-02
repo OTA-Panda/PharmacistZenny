@@ -1,4 +1,4 @@
-/* red {
+red {
   color: #f55;
 }
 
@@ -14,13 +14,8 @@ green {
   color: mediumseagreen;
 }
 
-h1, h2, h3, h4 {
-  color: orange;  
-} */
-
 /* by ANDY FERRA */
-
-body {
+/* body {
   font-family: Helvetica, arial, sans-serif;
   font-size: 14px;
   line-height: 1.6;
@@ -297,4 +292,4 @@ pre {
   border-radius: 3px; }
   pre code, pre tt {
     background-color: transparent;
-    border: none; }
+    border: none; } */
