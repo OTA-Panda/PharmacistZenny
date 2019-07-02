@@ -1,36 +1,38 @@
+<link href="PharmZenny.css" rel="stylesheet"></link>
+
 # Pharmacist Zenny
 
 Growing up, Dr. Mario was one of my favorite games.  I often joked with my sister that it would be funny to replace Mario with my mom and have her throw the pills. Et Voilà.
 
-## <span style="color:orange">**Game Overview**</span>
+## <orange>**Game Overview**</orange>
 
-- #### <span style="color:mediumseagreen">**The player is presented with a 2-dimensional field (the bottle):**</span>
+- #### <green>**The player is presented with a 2-dimensional field (the bottle):**</green>
 
   - 8 spaces wide
   - 16 spaces high
   - Has an opening (spout) 2 space wide, centered at the top
 
-- #### <span style="color:mediumseagreen">**Pharmacist Zenny tosses pills into the bottle, 1 at a time**</span>
+- #### <green>**Pharmacist Zenny tosses pills into the bottle, 1 at a time**</green>
 
   - Pill are 1 x 2 spaces
   - Pills have **colors**, that can be either 
-  <span style="color:#e55">**red**</span>, 
-  <span style="color:#ff5">**yellow**</span>, or 
-  <span style="color:#55e">**blue**</span>
+  <red>**red**</red>, 
+  <yellow>**yellow**</yellow>, or 
+  <blue>**blue**</blue>
   - A pill can be entirely *one* color **or** be a *combination* of 2 colors, with a total of 6 combinations:
-    - <span style="color:#e55">**red**</span> :
-      <span style="color:#e55">**red**</span>, 
-    - <span style="color:#e55">**red**</span> :
-      <span style="color:#ff5">**yellow**</span>, 
-    - <span style="color:#e55">**red**</span> :
-      <span style="color:#55e">**blue**</span>, 
-    - <span style="color:#ff5">**yellow**</span> :
-      <span style="color:#ff5">**yellow**</span>,
-    - <span style="color:#ff5">**yellow**</span> :
-      <span style="color:#55e">**blue**</span>, 
-    - <span style="color:#55e">**blue**</span> :
-      <span style="color:#55e">**blue**</span>
-  - A tossed in pill will start at the spout and and fall at a regular rate (e.g. 1 space / 2 seconds)
+    - <red>**red**</red> :
+      <red>**red**</red>, 
+    - <red>**red**</red> :
+      <yellow>**yellow**</yellow>, 
+    - <red>**red**</red> :
+      <blue>**blue**</blue>, 
+    - <yellow>**yellow**</yellow> :
+      <yellow>**yellow**</yellow>,
+    - <yellow>**yellow**</yellow> :
+      <blue>**blue**</blue>, 
+    - <blue>**blue**<blue> :
+      <blue>**blue**</blue>
+  - A tossed in pill will start at the spout and and fall at a regular rate (e.g. 1 space / 1 seconds)
     - This rate will **increase** as the player completes levels
   - While a pill is falling, the player can:
     - **Move** it *left* or *right* within the limits of the bottle
@@ -43,19 +45,19 @@ Growing up, Dr. Mario was one of my favorite games.  I often joked with my siste
   - Pills are necessary to remove **"Diseases"** 
 
 
-- #### <span style="color:mediumseagreen">**The bottle is filled with creatures (Diseases) to remove**</span>
+- #### <green>**The bottle is filled with creatures (Diseases) to remove**</green>
 
   - Diseases are 1 x 1 spaces
   - Each disease has an arbitrary color: 
-  <span style="color:#e55">**red**</span>, 
-  <span style="color:#ff5">**yellow**</span>, or 
-  <span style="color:#55e">**blue**</span>
+  <red>**red**</red>, 
+  <yellow>**yellow**</yellow>, or 
+  <blue>**blue**</blue>
   - The number of diseases in a bottle starts off small (e.g. 4) and increases with each subsequent level
   - Diseases are randomly placed within the bottle, not to exceed a specified "Vertical Limit" (e.g. row 5)
     - The vertical limit increases as levels are completed (max: row 12)
   - Diseases are static in position within the bottle (i.e. they do not fall)
 
-## <span style="color:orange">**Game Mechanics**</span>
+## <orange>**Game Mechanics**</orange>
 
 - #### <span style="color:mediumpurple">**Play Condition**</span>
 
@@ -93,7 +95,7 @@ Growing up, Dr. Mario was one of my favorite games.  I often joked with my siste
     - The player cannot react fast enough with the given fall rate, thus affecting the creation of group lines
     - The player canot medicate the bottle fast enough due to the abundance and variegation of diseases
 
-## <span style="color:orange">**MVPs**</span>
+## <orange>**MVPs**</orange>
 
 - #### <span style="color:mediumpurple">**Features**</span>
 
@@ -117,14 +119,14 @@ Growing up, Dr. Mario was one of my favorite games.  I often joked with my siste
   - [ ] pill drops faster while holding "DOWN"
   - [ ] pill rotates count-clockwise with "d"
 
-## <span style="color:orange">**Technology**</span>
+## <orange>**Technology**</orange>
 
   - HTML5 - base infrastructure
   - Canvas - Visuals
   - Vanilla JavaScript - game logic and build
   - Webpack - bundling and scripts
 
-## <span style="color:orange">**Implementation & Timeline**</span>
+## <orange>**Implementation & Timeline**</orange>
 
 - #### <span style="color:mediumpurple">**Day 1**</span>
 
