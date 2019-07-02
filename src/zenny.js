@@ -38,10 +38,18 @@ const pillMatrix = [
   [0, 0, 0],
 ]
 
+const colors = ['red', 'yellow', 'blue']
+randomColor = () => {
+  let color = colors[Math.floor(Math.random()*colors.length)]
+  console.log(color)
+  return color
+}
 //paramaters of player's pill and its logical shape/orientation
 const player = { 
   pos: {x: 2, y: -1}, //starting position of pill
-  pill: pillMatrix
+  pill: pillMatrix,
+  color1: randomColor(),
+  color2: colors[Math.floor(Math.random()*colors.length)],
 }
 
 draw = () => {
@@ -59,12 +67,13 @@ draw = () => {
 
 }
 
+
 //function that defines pill based on matrix and offset given
 drawMatrix = (matrix, offset) => {
   matrix.forEach((row, y) => {
     row.forEach((value, x) => {
       if (value !== 0) {
-        context.fillStyle = 'red'
+        context.fillStyle = player.color1
         context.fillRect(
           x + offset.x + bottleOffset.x, //position x
           y + offset.y + bottleOffset.y, //position y
@@ -110,9 +119,11 @@ let dropCounter = 0
 let dropInterval = 1000 // 1000ms = 1s
 let lastTime = 0 
 
-resetPillPosition = () => {
+newPill = () => {
   player.pos.x = bottleSpout.x
   player.pos.y = bottleSpout.y
+  player.color1 = randomColor()
+  player.color2 = randomColor()
 }
 
 pillDrop = () => {
@@ -120,7 +131,7 @@ pillDrop = () => {
   if (collide(bottle, player)) {
     player.pos.y--
     merge(bottle, player)
-    resetPillPosition()
+    newPill()
     console.table(bottle)
   }
   dropCounter = 0
@@ -150,6 +161,7 @@ playerMove = (dir) => {
 }
 
 rotate = (matrix, dir) => {
+  console.table(matrix)
   for (let y = 0; y < matrix.length; ++y) {
     for (let x = 0; x < y; ++x) {
       [
@@ -160,11 +172,11 @@ rotate = (matrix, dir) => {
         matrix[x][y]
       ]
     }
-    if (dir > 0) {
-      matrix.forEach(row => row.reverse())
-    } else {
-      matrix.reverse()
-    }
+  }
+  if (dir > 0) {
+    matrix.forEach(row => row.reverse())
+  } else {
+    matrix.reverse()
   }
 }
 
