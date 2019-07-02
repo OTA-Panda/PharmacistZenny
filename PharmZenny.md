@@ -1,4 +1,4 @@
-<link href="PharmZenny.css" rel="stylesheet"></link>
+<link href="./PharmZenny.css" rel="stylesheet"></link>
 
 # Pharmacist Zenny
 
