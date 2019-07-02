@@ -1,4 +1,4 @@
-red {
+/* red {
   color: #f55;
 }
 
@@ -16,7 +16,7 @@ green {
 
 h1, h2, h3, h4 {
   color: orange;  
-}
+} */
 
 /* by ANDY FERRA */
 
@@ -58,7 +58,8 @@ h1, h2, h3, h4, h5, h6 {
 
 h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor, h5:hover a.anchor, h6:hover a.anchor {
   background: url("../../images/modules/styleguide/para.png") no-repeat 10px center;
-  text-decoration: none; }
+  text-decoration: none;
+  color: blue; }
 
 h1 tt, h1 code {
   font-size: inherit; }
