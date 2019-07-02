@@ -1,5 +1,5 @@
-<link href="./PharmZenny.css" rel="stylesheet"></link>
-<article class="markdown-body">
+<link href="https://github.com/TORTO21/PharmacistZenny/blob/master/PharmZenny.css" rel="stylesheet"></link>
+<!-- <article class="markdown-body"> -->
 # Pharmacist Zenny
 
 Growing up, Dr. Mario was one of my favorite games.  I often joked with my sister that it would be funny to replace Mario with my mom and have her throw the pills. Et Voilà.
@@ -157,4 +157,4 @@ Growing up, Dr. Mario was one of my favorite games.  I often joked with my siste
   - [ ] Work out Menus and Visuals for Menus
   - [ ] Implement Theme Music and Sound Bytes
 
-</article>
+<!-- </article> -->
