@@ -121,26 +121,24 @@ const matrix = [
   [1, 0],
 ]
 
-//data to be given to draw()
+//paramaters of player's pill and its logical shape/orientation
 const player = { 
   pos: {x: 5, y: 5},
   matrix: matrix
 }
 
 draw = () => {
-  //Draws Black background based on canvas width and height in index.html
-  context.fillStyle = '#000'
-  context.fillRect(0, 0, canvas.width, canvas.height)
-  context.fillStyle = '#55f'
-  context.fillRect(2, 2, 8, 16)
-  context.fillStyle = '#55f'
-  context.fillRect(5, 1, 2, 1)
-  //Draws Shape based off of position and matrix in const player
-  drawMatrix(player.matrix, player.pos)
+  context.fillStyle = '#000' //black
+  context.fillRect(0, 0, canvas.width, canvas.height) //background based on index.html
+  context.fillStyle = '#55f' //blue
+  context.fillRect(2, 2, 8, 16) //spout
+  context.fillStyle = '#55f' //blue
+  context.fillRect(5, 1, 2, 1) //bottle
+  drawMatrix(player.matrix, player.pos) //draws shape based on position
 
 }
 
-//function draw matrix data (pill shape)
+//function that defines pill based on matrix and offset given
 drawMatrix = (matrix, offset) => {
   matrix.forEach((row, y) => {
     row.forEach((value, x) => {
