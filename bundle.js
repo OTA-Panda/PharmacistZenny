@@ -136,23 +136,22 @@ bottleClear = () => {
   bottle.forEach(row => row.fill(0))
 }
 
-bottleSectionClear = (matchesArray) => {
-  for (let i = 0; i < matchesArray.length; i++) {
-    const x = matchesArray[i][0]
-    const y = matchesArray[i][1]
+bottleSectionClear = (positionsArray) => {
+  for (let i = 0; i < positionsArray.length; i++) {
+    const x = positionsArray[i][0]
+    const y = positionsArray[i][1]
     bottle[y][x] = 0
   }
 }
 
 bottleCheck = () => {
-  console.log("In bottleCheck")
-  console.log("==============")
   let consecutive = 1
+  let allMatchPositions = []
   for (let x = 0; x < bottle[0].length - 1  ; ++x) {
     let verticalPositions = []
     for (let y = bottle.length - 1; y > 0; --y) {
-      if (bottle[y][x] && bottle[y - 1][x] && bottle[y][x] === bottle[y - 1][x]) {
-        if (consecutive === 1) verticalPositions.push([x, y - 1])
+      if (bottle[y][x] && bottle[y + 1] && bottle[y][x] === bottle[y + 1][x]) {
+        if (consecutive === 1) verticalPositions.push([x, y + 1])
         consecutive++
         console.log(consecutive)
         verticalPositions.push([x, y])
@@ -160,7 +159,9 @@ bottleCheck = () => {
         if (consecutive > 3) {
           console.log("4 chain!")
           console.log(verticalPositions)
-          bottleSectionClear(verticalPositions)
+          // bottleSectionClear(verticalPositions)
+          allMatchPositions = allMatchPositions.concat(verticalPositions)
+          console.log(allMatchPositions)
         }
         consecutive = 1
         verticalPositions = []
@@ -169,22 +170,20 @@ bottleCheck = () => {
       if (y === 0 && consecutive > 3) {
         console.log("4 chain!")
         console.log(verticalPositions)
-        bottleSectionClear(verticalPositions)
+        // bottleSectionClear(verticalPositions)
+        allMatchPositions = allMatchPositions.concat(verticalPositions)
       }
       // console.log(`${bottle[y][x]} ${consecutive}`)
     }
   }
+  bottleSectionClear(allMatchPositions)
 }
 
 
 // bottleCheck = () => {
-//   console.log("In bottleCheck")
-//   console.log("==============")
 //   let consecutive = 1
-//   let horizontalPositions = []
 //   for (let y = bottle.length - 1; y > 0; --y) {  //14 to check only first row
-//     // let consecutive = 1
-//     // let horizontalPositions = []
+//     let horizontalPositions = []
 //     for (let x = 0; x < bottle[y].length; ++x) {
 //       if (bottle[y][x] && bottle[y][x - 1] && bottle[y][x] === bottle[y][x - 1]) {
 //         if (consecutive === 1) horizontalPositions.push([x - 1, y])
