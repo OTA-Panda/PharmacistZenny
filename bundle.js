@@ -102,7 +102,7 @@ context.scale(scaleUp, scaleUp)
 
 //pushes an array of length 'width' with each element as 0
 //into array 'matrix,' decrementing 'height' until falsey (i.e. 0)
-createMatrix = (width, height) => {
+bottleCreate = (width, height) => {
   const matrix = []
   while (height--) { 
     matrix.push(new Array(width).fill(0))
@@ -111,7 +111,7 @@ createMatrix = (width, height) => {
 }
 
 //instantiate logical 2d field with 8 columns and 16 rows filled with 0s
-bottle = createMatrix(8, 16)
+bottle = bottleCreate(8, 16)
 console.log(bottle); console.table(bottle)
 
 //offsets for moving graphics and logic
@@ -123,7 +123,7 @@ const bottleOffset = {
 //position of spout on bottle
 const bottleSpout = {
   x: 3,
-  y: -1,
+  y: 0,
 }
 
 // logical 2d matrix of pill with room to rotate
@@ -132,7 +132,11 @@ const pillMatrix = [
   [1, 0],
 ]
 
-createPill = (type) => {
+bottleClear = () => {
+  bottle.forEach(row => row.fill(0))
+}
+
+pillCreate = (type) => {
   switch (type) {
     case 'rr':
       return [
@@ -171,7 +175,7 @@ createPill = (type) => {
 //paramaters of player's pill and its logical shape/orientation
 const player = { 
   pos: {x: 3, y: -1}, //starting position of pill
-  pill: createPill('bb'),
+  pill: pillCreate('bb'),
 }
 
 draw = () => {
@@ -182,7 +186,7 @@ draw = () => {
   context.fillStyle = '#55f' //blue
   context.fillRect(
     bottleSpout.x + bottleOffset.x,
-    bottleSpout.y + bottleOffset.y,
+    bottleSpout.y + bottleOffset.y - 1,
     2, 1) //spout
   drawMatrix(bottle, { x: 0, y: 0}) //draw any spaces that exist in logic
   drawMatrix(player.pill, player.pos) //draws shape based on position
@@ -241,12 +245,18 @@ let dropCounter = 0
 let dropInterval = 1000 // 1000ms = 1s
 let lastTime = 0 
 
-newPill = () => {
+pillNew = () => {
   const pills = ['rr', 'ry', 'rb', 'yy', 'yb', 'bb']
-  console.log(pills[pills.length * Math.random() | 0])
-  player.pill = createPill(pills[pills.length * Math.random() | 0])
+  // console.log(pills[pills.length * Math.random() | 0])
+  player.pill = pillCreate(pills[pills.length * Math.random() | 0])
   player.pos.x = bottleSpout.x
   player.pos.y = bottleSpout.y
+  console.log(bottleSpout.x)
+  console.log(bottleSpout.y)
+  if (collide(bottle, player)) {
+    bottleClear()
+    
+  }
 }
 
 pillDrop = () => {
@@ -254,8 +264,9 @@ pillDrop = () => {
   if (collide(bottle, player)) {
     player.pos.y--
     merge(bottle, player)
-    newPill()
-    console.table(bottle)
+    pillNew()
+    
+    // console.table(bottle)
   }
   dropCounter = 0
 }
