@@ -33,23 +33,50 @@ const bottleSpout = {
 
 // logical 2d matrix of pill with room to rotate
 const pillMatrix = [
-  [0, 1, 0],
-  [0, 1, 0],
-  [0, 0, 0],
+  [1, 0],
+  [1, 0],
 ]
 
-const colors = ['red', 'yellow', 'blue']
-randomColor = () => {
-  let color = colors[Math.floor(Math.random()*colors.length)]
-  console.log(color)
-  return color
+createPill = (type) => {
+  switch (type) {
+    case 'rr':
+      return [
+        ['red', 0],
+        ['red', 0],
+      ]
+    case 'ry':
+      return [
+        ['red', 0],
+        ['yellow', 0],
+      ]
+    case 'rb':
+      return [
+        ['red', 0],
+        ['blue', 0],
+      ]
+    case 'yy':
+      return [
+        ['yellow', 0],
+        ['yellow', 0],
+      ]
+    case 'yb':
+      return [
+        ['yellow', 0],
+        ['blue', 0],
+      ]
+    case 'bb':
+      return [
+        ['blue', 0],
+        ['blue', 0],
+      ]
+  }
 }
+
+
 //paramaters of player's pill and its logical shape/orientation
 const player = { 
-  pos: {x: 2, y: -1}, //starting position of pill
-  pill: pillMatrix,
-  color1: randomColor(),
-  color2: colors[Math.floor(Math.random()*colors.length)],
+  pos: {x: 3, y: -1}, //starting position of pill
+  pill: createPill('bb'),
 }
 
 draw = () => {
@@ -73,7 +100,7 @@ drawMatrix = (matrix, offset) => {
   matrix.forEach((row, y) => {
     row.forEach((value, x) => {
       if (value !== 0) {
-        context.fillStyle = player.color1
+        context.fillStyle = value
         context.fillRect(
           x + offset.x + bottleOffset.x, //position x
           y + offset.y + bottleOffset.y, //position y
@@ -120,10 +147,11 @@ let dropInterval = 1000 // 1000ms = 1s
 let lastTime = 0 
 
 newPill = () => {
+  const pills = ['rr', 'ry', 'rb', 'yy', 'yb', 'bb']
+  console.log(pills[pills.length * Math.random() | 0])
+  player.pill = createPill(pills[pills.length * Math.random() | 0])
   player.pos.x = bottleSpout.x
   player.pos.y = bottleSpout.y
-  player.color1 = randomColor()
-  player.color2 = randomColor()
 }
 
 pillDrop = () => {
@@ -153,6 +181,7 @@ update = (time = 0) => {
   requestAnimationFrame(update) //recursive loop -- never ends
 }
 
+// moves player in desired direction, but stops if collision is true
 playerMove = (dir) => {
   player.pos.x += dir
   if (collide(bottle, player)) {
@@ -160,14 +189,14 @@ playerMove = (dir) => {
   }
 }
 
-rotate = (matrix, dir) => {
-  console.table(matrix)
+rotate = (matrix, dir) => {  //***NEED TO FIX
+  // console.table(matrix)
   for (let y = 0; y < matrix.length; ++y) {
     for (let x = 0; x < y; ++x) {
       [
         matrix[x][y],
         matrix[y][x]
-      ] = [
+      ] = [          //flips 2d array along 135 deg axis; everything backwards
         matrix[y][x],
         matrix[x][y]
       ]
@@ -181,29 +210,40 @@ rotate = (matrix, dir) => {
 }
 
 playerRotate = (dir) => {
+  const pos = player.pos.x
+  let offset = -1
   rotate(player.pill, dir)
+  while (collide(bottle, player)) {
+    player.pos.x += offset
+    offset = -(offset + (offset > 0 ? 1 : -1))
+    if (offset > player.pill[0].length) {
+      rotate(player.pill, -dir)
+      player.pos.x = pos
+      return
+    }
+  }
 }
 
-//Pill position manipulation
+//User Interface
 document.addEventListener('keydown', event => {
-  console.log(event)
+  // console.log(event)
   switch (event.code) {
-    case "ArrowLeft":
+    case "ArrowLeft":  // move pill left
       playerMove(-1)
       break
-    case "ArrowRight":
+    case "ArrowRight": // move pill right
       playerMove(+1)
       break
-    case "ArrowDown":
+    case "ArrowDown":  // move pill down : accelerate
       pillDrop()
       break
-    case "KeyD":
+    case "KeyD":       // rotate counter-clockwise
       playerRotate(-1)
       break
-    case "KeyF":
+    case "KeyF":       // rotate clockwise
       playerRotate(1)
       break
-    case "Space": //to be used
+    case "Space": //to be used for instant drop
       break
   }
 })
