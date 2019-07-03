@@ -52,37 +52,69 @@ bottleSectionClear = (matchesArray) => {
 bottleCheck = () => {
   console.log("In bottleCheck")
   console.log("==============")
-  let colorCount = 0
-  
-  for (let y = bottle.length - 1; y > 14; --y) {  //14 to check only first row
-    let consecutive = 1
-    let horizontalPositions = []
-    for (let x = 0; x < bottle[y].length; ++x) {
-      if (bottle[y][x] && bottle[y][x - 1] && bottle[y][x] === bottle[y][x - 1]) {
-        if (consecutive === 1) horizontalPositions.push([x - 1, y])
+  let consecutive = 1
+  for (let x = 0; x < bottle[0].length - 1  ; ++x) {
+    let verticalPositions = []
+    for (let y = bottle.length - 1; y > 0; --y) {
+      if (bottle[y][x] && bottle[y - 1][x] && bottle[y][x] === bottle[y - 1][x]) {
+        if (consecutive === 1) verticalPositions.push([x, y - 1])
         consecutive++
-        horizontalPositions.push([x, y])
+        console.log(consecutive)
+        verticalPositions.push([x, y])
       } else {
         if (consecutive > 3) {
           console.log("4 chain!")
-          console.log(horizontalPositions)
-          bottleSectionClear(horizontalPositions)
+          console.log(verticalPositions)
+          bottleSectionClear(verticalPositions)
         }
         consecutive = 1
-        horizontalPositions = []
+        verticalPositions = []
       }
       //if at end of row, check consecutive and remove items if great than 3
-      if (x === bottle[y].length - 1 && consecutive > 3) {
+      if (y === 0 && consecutive > 3) {
         console.log("4 chain!")
-        console.log(horizontalPositions)
-        bottleSectionClear(horizontalPositions)
+        console.log(verticalPositions)
+        bottleSectionClear(verticalPositions)
       }
-      
-      console.log(`${bottle[y][x]} ${consecutive}`)
-    // console.log(`${nextPillColor} ${consecutive}`)
+      // console.log(`${bottle[y][x]} ${consecutive}`)
     }
   }
 }
+
+
+// bottleCheck = () => {
+//   console.log("In bottleCheck")
+//   console.log("==============")
+//   let consecutive = 1
+//   let horizontalPositions = []
+//   for (let y = bottle.length - 1; y > 0; --y) {  //14 to check only first row
+//     // let consecutive = 1
+//     // let horizontalPositions = []
+//     for (let x = 0; x < bottle[y].length; ++x) {
+//       if (bottle[y][x] && bottle[y][x - 1] && bottle[y][x] === bottle[y][x - 1]) {
+//         if (consecutive === 1) horizontalPositions.push([x - 1, y])
+//         consecutive++
+//         horizontalPositions.push([x, y])
+//       } else {
+//         if (consecutive > 3) {
+//           console.log("4 chain!")
+//           console.log(horizontalPositions)
+//           bottleSectionClear(horizontalPositions)
+//         }
+//         consecutive = 1
+//         horizontalPositions = []
+//       }
+//       //if at end of row, check consecutive and remove items if great than 3
+//       if (x === bottle[y].length - 1 && consecutive > 3) {
+//         console.log("4 chain!")
+//         console.log(horizontalPositions)
+//         bottleSectionClear(horizontalPositions)
+//       }
+//       // console.log(`${bottle[y][x]} ${consecutive}`)
+//     }
+//   }
+// }
+
 
 pillCreate = (type) => {
   switch (type) {
