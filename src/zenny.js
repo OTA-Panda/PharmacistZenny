@@ -41,42 +41,42 @@ bottleClear = () => {
   bottle.forEach(row => row.fill(0))
 }
 
+bottleSectionClear = (matchesArray) => {
+  for (let i = 0; i < matchesArray.length; i++) {
+    const x = matchesArray[i][0]
+    const y = matchesArray[i][1]
+    bottle[y][x] = 0
+  }
+}
+
 bottleCheck = () => {
-  console.log("in bottleCheck")
+  console.log("In bottleCheck")
+  console.log("==============")
   let colorCount = 0
   let prevPillColor
   let nextPillColor
   let horizontalPositions = []
+  let consecutive = 1
+  
   for (let y = bottle.length - 1; y > 14; --y) {  //14 to check only first row
     for (let x = 0; x < bottle[y].length; ++x) {
-      if (bottle[y][x] !== 0) {          //if space has a color
-        
-        colorCount++                       //increment color count
-        console.log(`colorcount: ${colorCount}`)
-        nextPillColor = bottle[y][x]       //set current color to space's color
-        horizontalPositions.push([x, y])   //save color coordiante
-        // if (prevPillColor) {            //if there is a previous color
-        //   if (nextPillColor === prevPillColor ) {
-        //     colorCount++
-        //     // console.log(`colorcount: ${colorCount}`)
-        //     prevPillColor = nextPillColor
-        //     horizontalPositions.push[x, y]
-        //   } else {
-        //     console.log("else here")
-        //     colorCout = 0
-        //   }
-        //   colorCount++
-        //   horizontalPositions.push([x, y])
-        // } else {
-        //   prevPillColor = nextPillColor
-        // }
-      } else {                        //else reset data
-        colorCount = 0
-        prevPillColor = ''
-        nextPillColor = ''
-        horizontalPositions = []
+      if (bottle[y][x]) {
+        nextPillColor = bottle[y][x]
+        horizontalPositions.push([x, y])
+        if (bottle[y][x - 1] && bottle[y][x] === bottle[y][x - 1]) {
+          consecutive++
+          horizontalPositions.push[x, y]
+          if (consecutive > 3) {
+            console.log("4 chain!")
+            console.log(horizontalPositions)
+          }
+        } else {
+          console.log(consecutive)
+          consecutive = 1
+        }
+        console.log(`${bottle[y][x]} ${consecutive}`)
       }
-      console.log(bottle[y][x])
+      // console.log(`${nextPillColor} ${consecutive}`)
     }
   }
 }
@@ -187,7 +187,7 @@ _collide = (bottle, player) => {
 }
 
 let dropCounter = 0
-let dropInterval = 1000 // 1000ms = 1s
+let dropInterval = 500 // 1000ms = 1s
 let lastTime = 0 
 
 pillNew = () => {
@@ -301,4 +301,4 @@ document.addEventListener('keydown', event => {
 })
 
 
-gameLoop () //instantiates game loop
+gameLoop() //instantiates game loop
