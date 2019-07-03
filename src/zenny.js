@@ -16,7 +16,7 @@ bottleCreate = (width, height) => {
 }
 
 //instantiate logical 2d field with 8 columns and 16 rows filled with 0s
-bottle = bottleCreate(8, 16)
+const bottle = bottleCreate(8, 16)
 console.log(bottle); console.table(bottle)
 
 //offsets for moving graphics and logic
@@ -77,9 +77,9 @@ pillCreate = (type) => {
 }
 
 
-//paramaters of player's pill and its logical shape/orientation
+//paramaters of player's pill and its logical shape, orientation, and position
 const player = { 
-  pos: {x: 3, y: -1}, //starting position of pill
+  pos: {x: bottleSpout.x, y: bottleSpout.y}, //starting position of pill
   pill: pillCreate('bb'),
 }
 
@@ -99,7 +99,7 @@ draw = () => {
 }
 
 
-//function that defines pill based on matrix and offset given
+//function that renders pill based on matrix and offset given
 drawMatrix = (matrix, offset) => {
   matrix.forEach((row, y) => {
     row.forEach((value, x) => {
