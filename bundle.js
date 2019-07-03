@@ -126,7 +126,7 @@ const bottleSpout = {
   y: 0,
 }
 
-// logical 2d matrix of pill with room to rotate
+// logical 2d matrix of pill with room to pillRotate
 const pillMatrix = [
   [1, 0],
   [1, 0],
@@ -134,6 +134,46 @@ const pillMatrix = [
 
 bottleClear = () => {
   bottle.forEach(row => row.fill(0))
+}
+
+bottleCheck = () => {
+  console.log("in bottleCheck")
+  let colorCount = 0
+  let prevPillColor
+  let nextPillColor
+  let horizontalPositions = []
+  for (let y = bottle.length - 1; y > 14; --y) {  //14 to check only first row
+    for (let x = 0; x < bottle[y].length; ++x) {
+      if (bottle[y][x] !== 0) {          //if space has a color
+        
+        colorCount++                       //increment color count
+        console.log(`colorcount: ${colorCount}`)
+        nextPillColor = bottle[y][x]       //set current color to space's color
+        horizontalPositions.push([x, y])   //save color coordiante
+        // if (prevPillColor) {            //if there is a previous color
+        //   if (nextPillColor === prevPillColor ) {
+        //     colorCount++
+        //     // console.log(`colorcount: ${colorCount}`)
+        //     prevPillColor = nextPillColor
+        //     horizontalPositions.push[x, y]
+        //   } else {
+        //     console.log("else here")
+        //     colorCout = 0
+        //   }
+        //   colorCount++
+        //   horizontalPositions.push([x, y])
+        // } else {
+        //   prevPillColor = nextPillColor
+        // }
+      } else {                        //else reset data
+        colorCount = 0
+        prevPillColor = ''
+        nextPillColor = ''
+        horizontalPositions = []
+      }
+      console.log(bottle[y][x])
+    }
+  }
 }
 
 pillCreate = (type) => {
@@ -212,7 +252,7 @@ drawMatrix = (matrix, offset) => {
 }
 
 //based on matrix
-merge = (bottle, player) => {
+_merge = (bottle, player) => {
   player.pill.forEach((row, y) => {
     row.forEach((value, x) => {
       if (value !== 0) {
@@ -223,7 +263,7 @@ merge = (bottle, player) => {
 }
 
 // drape over bottle and check if player's piece collides
-collide = (bottle, player) => {
+_collide = (bottle, player) => {
   const [pill, offset] = [player.pill, player.pos]
   for (let y = 0; y < pill.length; ++y) { //add y first to check next pos
     for (let x = 0; x < pill[y].length; ++x) { //add x first to check next pos
@@ -251,9 +291,9 @@ pillNew = () => {
   player.pill = pillCreate(pills[pills.length * Math.random() | 0])
   player.pos.x = bottleSpout.x
   player.pos.y = bottleSpout.y
-  console.log(bottleSpout.x)
-  console.log(bottleSpout.y)
-  if (collide(bottle, player)) {
+  // console.log(bottleSpout.x)
+  // console.log(bottleSpout.y)
+  if (_collide(bottle, player)) {
     bottleClear()
     
   }
@@ -261,9 +301,10 @@ pillNew = () => {
 
 pillDrop = () => {
   player.pos.y++
-  if (collide(bottle, player)) {
+  if (_collide(bottle, player)) {
     player.pos.y--
-    merge(bottle, player)
+    _merge(bottle, player)
+    bottleCheck(bottle)
     pillNew()
     
     // console.table(bottle)
@@ -272,11 +313,11 @@ pillDrop = () => {
 }
 
 //Define Game Loop
-update = (time = 0) => {
+gameLoop = (time = 0) => {
   const deltaTime = time - lastTime //change in time
   lastTime = time //roughly 16.7ms
 
-  //update player position of matrix on y value
+  //update player position in bottle on y value
   //whenever dropCounter is greater than 1s
   dropCounter += deltaTime
   if (dropCounter > dropInterval) {
@@ -284,18 +325,18 @@ update = (time = 0) => {
   }
   // console.log(deltaTime)
   draw() //draw or rather re-draw
-  requestAnimationFrame(update) //recursive loop -- never ends
+  requestAnimationFrame(gameLoop) //recursive loop -- never ends
 }
 
 // moves player in desired direction, but stops if collision is true
 playerMove = (dir) => {
   player.pos.x += dir
-  if (collide(bottle, player)) {
+  if (_collide(bottle, player)) {
     player.pos.x -= dir
   }
 }
 
-rotate = (matrix, dir) => {  //***NEED TO FIX
+pillRotate = (matrix, dir) => {  //***NEED TO FIX
   // console.table(matrix)
   for (let y = 0; y < matrix.length; ++y) {
     for (let x = 0; x < y; ++x) {
@@ -318,12 +359,12 @@ rotate = (matrix, dir) => {  //***NEED TO FIX
 playerRotate = (dir) => {
   const pos = player.pos.x
   let offset = -1
-  rotate(player.pill, dir)
-  while (collide(bottle, player)) {
+  pillRotate(player.pill, dir)
+  while (_collide(bottle, player)) {
     player.pos.x += offset
     offset = -(offset + (offset > 0 ? 1 : -1))
     if (offset > player.pill[0].length) {
-      rotate(player.pill, -dir)
+      pillRotate(player.pill, -dir)
       player.pos.x = pos
       return
     }
@@ -343,10 +384,10 @@ document.addEventListener('keydown', event => {
     case "ArrowDown":  // move pill down : accelerate
       pillDrop()
       break
-    case "KeyD":       // rotate counter-clockwise
+    case "KeyD":       // pillRotate counter-clockwise
       playerRotate(-1)
       break
-    case "KeyF":       // rotate clockwise
+    case "KeyF":       // pillRotate clockwise
       playerRotate(1)
       break
     case "Space": //to be used for instant drop
@@ -355,7 +396,7 @@ document.addEventListener('keydown', event => {
 })
 
 
-update () //instantiates game loop
+gameLoop () //instantiates game loop
 
 /***/ })
 
