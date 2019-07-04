@@ -9,9 +9,7 @@ context.scale(scaleUp, scaleUp)
 //into array 'matrix,' decrementing 'height' until falsey (i.e. 0)
 bottleCreate = (width, height) => {
   const matrix = []
-  while (height--) { 
-    matrix.push(new Array(width).fill(0))
-  }
+  while (height--) matrix.push(new Array(width).fill(0))
   return matrix
 }
 
@@ -20,39 +18,31 @@ const bottle = bottleCreate(8, 16)
 console.log(bottle); console.table(bottle)
 
 //offsets for moving graphics and logic
-const bottleOffset = {
-  x: 3,
-  y: 3,
-}
+const bottleOffset = { x: 3, y: 3 }
 
 //position of spout on bottle
-const bottleSpout = {
-  x: 3,
-  y: 0,
-}
+const bottleSpout = { x: 3, y: 0 }
 
-// logical 2d matrix of pill with room to pillRotate
-const pillMatrix = [
-  [1, 0],
-  [1, 0],
-]
-
-bottleClear = () => {
+bottleNew = () => {
   bottle.forEach(row => row.fill(0))
+  player.score = 0
+  playerScore()
 }
 
-bottleSectionClear = (positionsArray) => {
+bottleClearSection = (positionsArray) => {
   for (let i = 0; i < positionsArray.length; i++) {
     const x = positionsArray[i][0]
     const y = positionsArray[i][1]
     bottle[y][x] = 0
+    player.score += 10
   }
 }
 
 bottleCheck = () => {
   let consecutive = 1
   let allMatchPositions = []
-  for (let x = 0; x < bottle[0].length - 1  ; ++x) {
+
+  for (let x = 0; x < bottle[0].length  ; ++x) {
     let verticalPositions = []
     for (let y = bottle.length - 1; y > 0; --y) {
       if (bottle[y][x] && bottle[y + 1] && bottle[y][x] === bottle[y + 1][x]) {
@@ -64,23 +54,21 @@ bottleCheck = () => {
         if (consecutive > 3) {
           console.log("4 chain!")
           console.log(verticalPositions)
-          // bottleSectionClear(verticalPositions)
           allMatchPositions = allMatchPositions.concat(verticalPositions)
           console.log(allMatchPositions)
         }
         consecutive = 1
         verticalPositions = []
       }
-      //if at end of row, check consecutive and remove items if great than 3
+      //if at top of column, check consecutive and remove items if great than 3
       if (y === 0 && consecutive > 3) {
         console.log("4 chain!")
         console.log(verticalPositions)
-        // bottleSectionClear(verticalPositions)
         allMatchPositions = allMatchPositions.concat(verticalPositions)
       }
-      // console.log(`${bottle[y][x]} ${consecutive}`)
     }
   }
+
   for (let y = bottle.length - 1; y > 0; --y) {  //14 to check only first row
     let horizontalPositions = []
     for (let x = 0; x < bottle[y].length; ++x) {
@@ -92,7 +80,6 @@ bottleCheck = () => {
         if (consecutive > 3) {
           console.log("4 chain!")
           console.log(horizontalPositions)
-          // bottleSectionClear(horizontalPositions)
           allMatchPositions = allMatchPositions.concat(horizontalPositions)
         }
         consecutive = 1
@@ -102,55 +89,33 @@ bottleCheck = () => {
       if (x === bottle[y].length - 1 && consecutive > 3) {
         console.log("4 chain!")
         console.log(horizontalPositions)
-        // bottleSectionClear(horizontalPositions)
         allMatchPositions = allMatchPositions.concat(horizontalPositions)
       }
       // console.log(`${bottle[y][x]} ${consecutive}`)
     }
   }
-  bottleSectionClear(allMatchPositions)
+  bottleClearSection(allMatchPositions)
 }
 
-pillCreate = (type) => {
-  switch (type) {
-    case 'rr':
-      return [
-        ['red', 0],
-        ['red', 0],
-      ]
-    case 'ry':
-      return [
-        ['red', 0],
-        ['yellow', 0],
-      ]
-    case 'rb':
-      return [
-        ['red', 0],
-        ['blue', 0],
-      ]
-    case 'yy':
-      return [
-        ['yellow', 0],
-        ['yellow', 0],
-      ]
-    case 'yb':
-      return [
-        ['yellow', 0],
-        ['blue', 0],
-      ]
-    case 'bb':
-      return [
-        ['blue', 0],
-        ['blue', 0],
-      ]
-  }
+pillColor = () => {
+  const colors = ['red', 'yellow', 'blue']
+  return colors[Math.random() * colors.length | 0]
 }
 
+pillCreate = () => {
+  const c1 = pillColor()
+  const c2 = pillColor()
+  return [
+    [c1, 0],
+    [c2, 0]
+  ]
+}
 
 //paramaters of player's pill and its logical shape, orientation, and position
 const player = { 
-  pos: {x: bottleSpout.x, y: bottleSpout.y}, //starting position of pill
-  pill: pillCreate('bb'),
+  pos: { x: bottleSpout.x, y: bottleSpout.y }, //starting position of pill
+  pill: pillCreate(),
+  score: 0,
 }
 
 draw = () => {
@@ -165,7 +130,6 @@ draw = () => {
     2, 1) //spout
   drawMatrix(bottle, { x: 0, y: 0}) //draw any spaces that exist in logic
   drawMatrix(player.pill, player.pos) //draws shape based on position
-
 }
 
 
@@ -186,12 +150,12 @@ drawMatrix = (matrix, offset) => {
   })
 }
 
-//based on matrix
+//logical merge of pill matrix to bottle matrix
 _merge = (bottle, player) => {
   player.pill.forEach((row, y) => {
     row.forEach((value, x) => {
-      if (value !== 0) {
-        bottle[y + player.pos.y][x + player.pos.x] = value
+      if (value !== 0) {   //if value in pill matrix exists
+        bottle[y + player.pos.y][x + player.pos.x] = value //overwrite bottle
       }
     })
   })
@@ -221,17 +185,9 @@ let dropInterval = 500 // 1000ms = 1s
 let lastTime = 0 
 
 pillNew = () => {
-  const pills = ['rr', 'ry', 'rb', 'yy', 'yb', 'bb']
-  // console.log(pills[pills.length * Math.random() | 0])
-  player.pill = pillCreate(pills[pills.length * Math.random() | 0])
-  player.pos.x = bottleSpout.x
-  player.pos.y = bottleSpout.y
-  // console.log(bottleSpout.x)
-  // console.log(bottleSpout.y)
-  if (_collide(bottle, player)) {
-    bottleClear()
-    
-  }
+  player.pill = pillCreate()
+  player.pos = {x: bottleSpout.x, y: bottleSpout.y}
+  if (_collide(bottle, player)) bottleNew()
 }
 
 pillDrop = () => {
@@ -241,10 +197,10 @@ pillDrop = () => {
     _merge(bottle, player)
     bottleCheck(bottle)
     pillNew()
-    
+    playerScore()
     // console.table(bottle)
   }
-  dropCounter = 0
+  dropCounter = 0  //reset counter
 }
 
 //Define Game Loop
@@ -306,6 +262,10 @@ playerRotate = (dir) => {
   }
 }
 
+playerScore = () => {
+  document.getElementById('score').innerText = player.score
+}
+
 //User Interface
 document.addEventListener('keydown', event => {
   // console.log(event)
@@ -330,5 +290,5 @@ document.addEventListener('keydown', event => {
   }
 })
 
-
+playerScore() //bootstrap score
 gameLoop() //instantiates game loop
