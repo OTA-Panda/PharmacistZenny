@@ -2,6 +2,7 @@ class Pill {
   constructor (context, position, colors, size) {
     this.context = context
     this.position = position
+    this.size = size
     this.horizontal = true
     this.positionA = position
     this.positionB = { x: position.x + size, y: position.y }
@@ -15,36 +16,91 @@ class Pill {
     this.pillA.drawPillHalf()
     this.pillB.drawPillHalf()
   }
+
+  rotate(direction) {
+    if (direction > 0) {
+      // console.log(this.pillA)
+      switch (this.pillA.getPillOrientation()) {
+        
+        case "left":                    //[0, 0]
+        console.log(this.pillA.getPillOrientation())
+        this.pillA.setPillPosition({    //[A, B]
+          x: this.position.x, y: this.position.y - this.size
+        }).setPillOrientation("up")     //[A, 0]
+        this.pillB.setPillPosition({    //[B, 0]
+          x: this.position.x, y: this.position.y
+        }).setPillOrientation("down")
+        break
+        case "up":                      //[A, 0]
+        this.pillA.setPillPosition({    //[B, 0]
+          x: this.position.x + this.size, y: this.position.y
+        }).setPillOrientation("right")  //[0, 0]
+        this.pillB.setPillPosition({    //[B, A]
+          x: this.position.x, y: this.position.y
+        }).setPillOrientation("left")
+        break
+        case "right":                   //[0, 0]
+        this.pillA.setPillPosition({    //[B, A]
+          x: this.position.x, y: this.position.y
+        }).setPillOrientation("down")   //[B, 0]
+        this.pillB.setPillPosition({    //[A, 0]
+          x: this.position.x, y: this.position.y - this.size
+        }).setPillOrientation("up")
+        break
+        case "down":                    //[B, 0]
+        this.pillA.setPillPosition({    //[A, 0]
+          x: this.position.x, y: this.position.y
+        }).setPillOrientation("left")   //[0, 0]
+        this.pillB.setPillPosition({    //[A, B]
+          x: this.position.x + this.size, y: this.position.y
+        }).setPillOrientation("right")
+        break
+      }
+    }
+  }
 }
 
 
 class PillHalf {
-  constructor (context, position, direction, color, size) {
+  constructor (context, position, orientation, color, size) {
     this.context = context
     this.position = position
-    this.direction = direction // reversed for cartesian logic
+    this.orientation = orientation
     this.color = color
     this.attached = true
     this.size = size
   }
 
-  getPillAngle(direction) {
-    switch (direction) {
+  getPillAngle(orientation) {
+    switch (orientation) {
       case "up": return -90
       case "down": return 90
       case "left": return 180
       case "right": return 0
     }
   }
+
+  getPillOrientation() {
+    return this.orientation
+  }
   
+  setPillOrientation(orientation) {
+    this.orientation = orientation
+    return this
+  }
+
+  setPillPosition(position) {
+    this.position = position
+    return this
+  }
 
   drawPillHalf() {
     let x = this.position.x
     let y = this.position.y
     let size = this.size
-    let degrees = this.getPillAngle(this.direction)
+    let degrees = this.getPillAngle(this.orientation)
     let curvature = .225  //affects corners of capsule
-    const lineWidth = 1
+    const lineWidth = this.size / 20
     const offset = lineWidth / 2
     this.context.fillStyle = this.color;
     this.context.lineWidth = lineWidth;
@@ -81,13 +137,22 @@ class PillHalf {
       this.context.stroke();
     this.context.restore()
   }
+}
+
+class PillPart {
+  constructor(context, position, color, size) {
+    this.context = context
+    this.position = position
+    this.color = color
+    this.size = size
+  }
 
 
   drawPillPart(){
     let x = this.position.x
     let y = this.position.y
     let size = this.size
-    const lineWidth = 1
+    const lineWidth = this.size / 20
     const offset = lineWidth / 2
     this.context.fillStyle = this.color;
     this.context.lineWidth = lineWidth;
