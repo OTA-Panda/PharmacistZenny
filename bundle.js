@@ -96,22 +96,34 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 class Pill {
-  constructor (context, position, colors, size) {
+  constructor (context, position, colors, space) {
     this.context = context
     this.position = position
-    this.size = size
-    this.horizontal = true
-    this.positionA = position
-    this.positionB = { x: position.x + size, y: position.y }
+    this.space = space
+    this.connected = true
+    const positionA = position
+    const positionB = { x: position.x + space, y: position.y }
     this.colorA = colors[Math.random() * colors.length | 0]
     this.colorB = colors[Math.random() * colors.length | 0]
-    this.pillA = new PillHalf(context, this.positionA, "left", this.colorA, size)
-    this.pillB = new PillHalf(context, this.positionB, "right", this.colorB, size)
+    this.pillA = new PillHalf(context, positionA, "left", this.colorA, space)
+    this.pillB = new PillHalf(context, positionB, "right", this.colorB, space)
   }
 
   draw() {
-    this.pillA.drawPillHalf()
-    this.pillB.drawPillHalf()
+    this.pillA.draw()
+    this.pillB.draw()
+  }
+
+  move(direction) {
+    let [xa, ya] = [this.pillA.getPillPosition().x, this.pillA.getPillPosition().y]
+    let [xb, yb] = [this.pillB.getPillPosition().x, this.pillB.getPillPosition().y]
+    if (direction > 0) {
+      this.pillA.setPillPosition({ x: xa + this.space, y: ya })
+      this.pillB.setPillPosition({ x: xb + this.space, y: yb })
+    } else {
+      this.pillA.setPillPosition({ x: xa - this.space, y: ya })
+      this.pillB.setPillPosition({ x: xb - this.space, y: yb })
+    }
   }
 
   rotate(direction) {
@@ -119,7 +131,7 @@ class Pill {
       switch (this.pillA.getPillOrientation()) {
         case "left":                    //[0, 0]
         this.pillA.setPillPosition({    //[A, B]
-          x: this.position.x, y: this.position.y - this.size
+          x: this.position.x, y: this.position.y - this.space
         }).setPillOrientation("up")     //[A, 0]
         this.pillB.setPillPosition({    //[B, 0]
           x: this.position.x, y: this.position.y
@@ -127,7 +139,7 @@ class Pill {
         break
         case "up":                      //[A, 0]
         this.pillA.setPillPosition({    //[B, 0]
-          x: this.position.x + this.size, y: this.position.y
+          x: this.position.x + this.space, y: this.position.y
         }).setPillOrientation("right")  //[0, 0]
         this.pillB.setPillPosition({    //[B, A]
           x: this.position.x, y: this.position.y
@@ -138,7 +150,7 @@ class Pill {
           x: this.position.x, y: this.position.y
         }).setPillOrientation("down")   //[B, 0]
         this.pillB.setPillPosition({    //[A, 0]
-          x: this.position.x, y: this.position.y - this.size
+          x: this.position.x, y: this.position.y - this.space
         }).setPillOrientation("up")
         break
         case "down":                    //[B, 0]
@@ -146,7 +158,7 @@ class Pill {
           x: this.position.x, y: this.position.y
         }).setPillOrientation("left")   //[0, 0]
         this.pillB.setPillPosition({    //[A, B]
-          x: this.position.x + this.size, y: this.position.y
+          x: this.position.x + this.space, y: this.position.y
         }).setPillOrientation("right")
         break
       }
@@ -157,12 +169,12 @@ class Pill {
           x: this.position.x, y: this.position.y
         }).setPillOrientation("down")   //[B, 0]
         this.pillB.setPillPosition({    //[A, 0]
-          x: this.position.x, y: this.position.y - this.size
+          x: this.position.x, y: this.position.y - this.space
         }).setPillOrientation("up")
         break
         case "down":                    //[B, 0]
         this.pillA.setPillPosition({    //[A, 0]
-          x: this.position.x + this.size, y: this.position.y
+          x: this.position.x + this.space, y: this.position.y
         }).setPillOrientation("right")  //[0, 0]
         this.pillB.setPillPosition({    //[B, A]
           x: this.position.x, y: this.position.y
@@ -170,7 +182,7 @@ class Pill {
         break
         case "right":                   //[0, 0]
         this.pillA.setPillPosition({    //[B, A]
-          x: this.position.x, y: this.position.y - this.size
+          x: this.position.x, y: this.position.y - this.space
         }).setPillOrientation("up")     //[A, 0]
         this.pillB.setPillPosition({    //[B, 0]
           x: this.position.x, y: this.position.y
@@ -181,7 +193,7 @@ class Pill {
           x: this.position.x, y: this.position.y
         }).setPillOrientation("left")   //[0, 0]
         this.pillB.setPillPosition({    //[A, B]
-          x: this.position.x + this.size, y: this.position.y
+          x: this.position.x + this.space, y: this.position.y
         }).setPillOrientation("right")
         break
       }
@@ -191,13 +203,13 @@ class Pill {
 
 
 class PillHalf {
-  constructor (context, position, orientation, color, size) {
+  constructor (context, position, orientation, color, space) {
     this.context = context
     this.position = position
     this.orientation = orientation
     this.color = color
     this.attached = true
-    this.size = size
+    this.space = space
   }
 
   getPillAngle(orientation) {
@@ -218,18 +230,22 @@ class PillHalf {
     return this
   }
 
+  getPillPosition() {
+    return this.position
+  }
+
   setPillPosition(position) {
     this.position = position
     return this
   }
 
-  drawPillHalf() {
+  draw() {
     let x = this.position.x
     let y = this.position.y
-    let size = this.size
+    let space = this.space
     let degrees = this.getPillAngle(this.orientation)
     let curvature = .225  //affects corners of capsule
-    const lineWidth = this.size / 20
+    const lineWidth = this.space / 20
     const offset = lineWidth / 2
     this.context.fillStyle = this.color;
     this.context.lineWidth = lineWidth;
@@ -237,30 +253,30 @@ class PillHalf {
 
     this.context.save()
       //rotate
-      this.context.translate(x + size / 2, y + size / 2)
+      this.context.translate(x + space / 2, y + space / 2)
         this.context.rotate(Math.PI / 180 * degrees) // rotates clockwise
-      this.context.translate(-x - size / 2, -y - size / 2)
+      this.context.translate(-x - space / 2, -y - space / 2)
       //render
       this.context.beginPath();
       this.context.moveTo(x, y + offset); // top left origin
-      this.context.lineTo(x + size / 2, y + offset);
+      this.context.lineTo(x + space / 2, y + offset);
       this.context.bezierCurveTo(
-        x + size * (1 - curvature),
+        x + space * (1 - curvature),
         y + offset,  
-        x + size - offset,
-        y + offset + size * curvature,
-        x + size - offset,
-        y + size / 2
+        x + space - offset,
+        y + offset + space * curvature,
+        x + space - offset,
+        y + space / 2
       )
       this.context.bezierCurveTo(
-        x + size - offset,
-        y + size - offset - size * curvature,
-        x + size * (1 - curvature),
-        y + size - offset,
-        x + size / 2,
-        y + size - offset
+        x + space - offset,
+        y + space - offset - space * curvature,
+        x + space * (1 - curvature),
+        y + space - offset,
+        x + space / 2,
+        y + space - offset
       )
-      this.context.lineTo(x, y + size - offset)
+      this.context.lineTo(x, y + space - offset)
       this.context.closePath();
       this.context.fill();
       this.context.stroke();
@@ -269,19 +285,22 @@ class PillHalf {
 }
 
 class PillPart {
-  constructor(context, position, color, size) {
+  constructor(context, position, color, space) {
     this.context = context
     this.position = position
     this.color = color
-    this.size = size
+    this.space = space
   }
 
+  setPillPosition(position) {
+    this.position = position
+  }
 
-  drawPillPart(){
+  draw(){
     let x = this.position.x
     let y = this.position.y
-    let size = this.size
-    const lineWidth = this.size / 20
+    let space = this.space
+    const lineWidth = this.space / 20
     const offset = lineWidth / 2
     this.context.fillStyle = this.color;
     this.context.lineWidth = lineWidth;
@@ -289,9 +308,9 @@ class PillPart {
     
     this.context.beginPath();
     this.context.arc(
-      x + size / 2,
-      y + size / 2,
-      size / 2 - offset,
+      x + space / 2,
+      y + space / 2,
+      space / 2 - offset,
       0,
       Math.PI * 2
     )
@@ -328,7 +347,7 @@ context.scale(scaleUp, scaleUp)
 const colors = ['red','yellow','deepskyblue'] //temp
 
 
-const pill1 = new _assets_pill__WEBPACK_IMPORTED_MODULE_0__["default"](context, { x: 1 * size, y: 1 * size }, colors, size)
+const pill1 = new _assets_pill__WEBPACK_IMPORTED_MODULE_0__["default"](context, { x: 1 * size, y: 2 * size }, colors, size)
 const pill2 = new _assets_pill__WEBPACK_IMPORTED_MODULE_0__["default"](context, { x: 0 * size, y: 6 * size }, colors, size)
 const pill3 = new _assets_pill__WEBPACK_IMPORTED_MODULE_0__["default"](context, { x: 0 * size, y: 8 * size }, colors, size)
 
@@ -341,13 +360,13 @@ setTimeout(() => {
   pill1.rotate(1)
   pill1.draw()
   setTimeout(() => {
-    pill1.rotate(1)
+    pill1.move(1)
     pill1.draw()
     setTimeout(() => {
       pill1.rotate(-1)
       pill1.draw()
       setTimeout(() => {
-        pill1.rotate(-1)
+        pill1.move(-1)
         pill1.draw()
       }, 1000)
     }, 2000)

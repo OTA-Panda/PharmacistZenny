@@ -11,7 +11,7 @@ context.scale(scaleUp, scaleUp)
 const colors = ['red','yellow','deepskyblue'] //temp
 
 
-const pill1 = new Pill(context, { x: 1 * size, y: 1 * size }, colors, size)
+const pill1 = new Pill(context, { x: 1 * size, y: 2 * size }, colors, size)
 const pill2 = new Pill(context, { x: 0 * size, y: 6 * size }, colors, size)
 const pill3 = new Pill(context, { x: 0 * size, y: 8 * size }, colors, size)
 
@@ -24,13 +24,13 @@ setTimeout(() => {
   pill1.rotate(1)
   pill1.draw()
   setTimeout(() => {
-    pill1.rotate(1)
+    pill1.move(1)
     pill1.draw()
     setTimeout(() => {
       pill1.rotate(-1)
       pill1.draw()
       setTimeout(() => {
-        pill1.rotate(-1)
+        pill1.move(-1)
         pill1.draw()
       }, 1000)
     }, 2000)
