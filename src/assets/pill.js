@@ -19,11 +19,8 @@ class Pill {
 
   rotate(direction) {
     if (direction > 0) {
-      // console.log(this.pillA)
       switch (this.pillA.getPillOrientation()) {
-        
         case "left":                    //[0, 0]
-        console.log(this.pillA.getPillOrientation())
         this.pillA.setPillPosition({    //[A, B]
           x: this.position.x, y: this.position.y - this.size
         }).setPillOrientation("up")     //[A, 0]
@@ -49,6 +46,41 @@ class Pill {
         break
         case "down":                    //[B, 0]
         this.pillA.setPillPosition({    //[A, 0]
+          x: this.position.x, y: this.position.y
+        }).setPillOrientation("left")   //[0, 0]
+        this.pillB.setPillPosition({    //[A, B]
+          x: this.position.x + this.size, y: this.position.y
+        }).setPillOrientation("right")
+        break
+      }
+    } else {
+      switch (this.pillA.getPillOrientation()) {
+        case "left":                    //[0, 0]
+        this.pillA.setPillPosition({    //[A, B]
+          x: this.position.x, y: this.position.y
+        }).setPillOrientation("down")   //[B, 0]
+        this.pillB.setPillPosition({    //[A, 0]
+          x: this.position.x, y: this.position.y - this.size
+        }).setPillOrientation("up")
+        break
+        case "down":                    //[B, 0]
+        this.pillA.setPillPosition({    //[A, 0]
+          x: this.position.x + this.size, y: this.position.y
+        }).setPillOrientation("right")  //[0, 0]
+        this.pillB.setPillPosition({    //[B, A]
+          x: this.position.x, y: this.position.y
+        }).setPillOrientation("left")
+        break
+        case "right":                   //[0, 0]
+        this.pillA.setPillPosition({    //[B, A]
+          x: this.position.x, y: this.position.y - this.size
+        }).setPillOrientation("up")     //[A, 0]
+        this.pillB.setPillPosition({    //[B, 0]
+          x: this.position.x, y: this.position.y
+        }).setPillOrientation("down")
+        break
+        case "up":                      //[A, 0]
+        this.pillA.setPillPosition({    //[B, 0]
           x: this.position.x, y: this.position.y
         }).setPillOrientation("left")   //[0, 0]
         this.pillB.setPillPosition({    //[A, B]
