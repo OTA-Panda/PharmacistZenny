@@ -95,35 +95,87 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-class PillHalf {
-  constructor (context, orientation, colors, part) {
+class Pill {
+  constructor (context, position, direction, colors, side) {
     this.context = context
-    this.orientation = orientation
+    this.position = position
+    this.direction = direction
     this.color = colors[Math.random() * colors.length | 0]
     this.attached = true
-    this.part = part
+    this.side = side
   }
 
-  draw() {
+  getPillAngle(direction) {
+    switch (direction) {
+      case "up": return 180
+      case "down": return 0
+      case "left": return 90
+      case "right": return -90
+    }
+  }
+
+  drawPillHalf() {
+    let x = this.position.x
+    let y = this.position.y
+    let width = 20
+    let height = 20
+    let degrees = this.getPillAngle(this.direction)
     const lineWidth = 1
     const offset = lineWidth / 2
     this.context.fillStyle = this.color;
     this.context.lineWidth = lineWidth;
     this.context.strokeStyle = 'black';
+
+    this.context.save()
+      //rotate
+      this.context.translate(x + width / 2, y + height / 2)
+        this.context.rotate(Math.PI / 180 * degrees);
+      this.context.translate(-x - width / 2, -y - height / 2)
+      //render
+      this.context.beginPath();
+      this.context.moveTo(x + offset, y); // top left origin
+      this.context.lineTo(x + offset, y + height / 2);
+      this.context.bezierCurveTo(
+        x + offset,
+        y + height * 1.1 + offset,  
+        x + width - offset,
+        y + height * 1.1 + offset,
+        x + width - offset,
+        y + height / 2 + offset);
+      this.context.lineTo(x + width - offset, y)
+      this.context.closePath();
+      this.context.fill();
+      this.context.stroke();
+    this.context.restore()
+  }
+
+
+  drawPillPart(){
+    let x = this.position.x
+    let y = this.position.y
+    let width = 20
+    let height = 20
+    const lineWidth = 1
+    const offset = lineWidth / 2
+    this.context.fillStyle = this.color;
+    this.context.lineWidth = lineWidth;
+    this.context.strokeStyle = 'black';
+    
     this.context.beginPath();
-    this.context.beginPath();
-    this.context.moveTo(0 + offset, 0);
-    this.context.lineTo(0 + offset, 10 + offset);
-    this.context.bezierCurveTo(0 + offset, 22 + offset, 20 - offset, 22 + offset, 20 - offset, 10 + offset);
-    this.context.lineTo(20 - offset, 0)
+    this.context.arc(
+      x + width / 2,
+      y + height / 2,
+      width / 2 - offset,
+      0,
+      Math.PI * 2
+    )
     this.context.closePath();
     this.context.fill();
     this.context.stroke();
-    
   }
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (PillHalf);
+/* harmony default export */ __webpack_exports__["default"] = (Pill);
 
 /***/ }),
 
@@ -149,11 +201,16 @@ context.scale(scaleUp, scaleUp)
 const colors = ['red','yellow','blue'] //temp
 
 
-const ph1 = new _assets_pill__WEBPACK_IMPORTED_MODULE_0__["default"](context,"up",colors,"A")
-const ph2 = new _assets_pill__WEBPACK_IMPORTED_MODULE_0__["default"](context,"down",colors,"B")
+const ph1 = new _assets_pill__WEBPACK_IMPORTED_MODULE_0__["default"](context, { x: 20, y: 10 }, "left", colors, 1)
+const ph2 = new _assets_pill__WEBPACK_IMPORTED_MODULE_0__["default"](context, { x: 40, y: 10 }, "right",colors, -1)
+const ph3 = new _assets_pill__WEBPACK_IMPORTED_MODULE_0__["default"](context, { x: 20, y: 30 }, "right",colors, -1)
+const ph4 = new _assets_pill__WEBPACK_IMPORTED_MODULE_0__["default"](context, { x: 40, y: 30 }, "right",colors, -1)
 
-ph1.draw()
-ph2.draw()
+ph1.drawPillHalf()
+ph2.drawPillHalf()
+ph3.drawPillPart()
+ph4.drawPillPart()
+
 
 /***/ })
 
