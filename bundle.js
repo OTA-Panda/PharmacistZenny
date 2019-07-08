@@ -1,2 +1,388 @@
-!function(e){var l={};function o(t){if(l[t])return l[t].exports;var r=l[t]={i:t,l:!1,exports:{}};return e[t].call(r.exports,r,r.exports,o),r.l=!0,r.exports}o.m=e,o.c=l,o.d=function(e,l,t){o.o(e,l)||Object.defineProperty(e,l,{enumerable:!0,get:t})},o.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},o.t=function(e,l){if(1&l&&(e=o(e)),8&l)return e;if(4&l&&"object"==typeof e&&e&&e.__esModule)return e;var t=Object.create(null);if(o.r(t),Object.defineProperty(t,"default",{enumerable:!0,value:e}),2&l&&"string"!=typeof e)for(var r in e)o.d(t,r,function(l){return e[l]}.bind(null,r));return t},o.n=function(e){var l=e&&e.__esModule?function(){return e.default}:function(){return e};return o.d(l,"a",l),l},o.o=function(e,l){return Object.prototype.hasOwnProperty.call(e,l)},o.p="",o(o.s=0)}([function(e,l){const o=document.getElementById("zenny"),t=o.getContext("2d");t.scale(20,20),bottleCreate=((e,l)=>{const o=[];for(;l--;)o.push(new Array(e).fill(0));return o});const r=bottleCreate(8,16);console.log(r),console.table(r);const n=3,c=3,a=3,i=0;bottleNew=(()=>{r.forEach(e=>e.fill(0)),p.score=0,playerScore()}),bottleClearSection=(e=>{for(let l=0;l<e.length;l++){const o=e[l][0],t=e[l][1];r[t][o]=0,p.score+=10}}),bottleCheck=(()=>{let e=1,l=[];for(let o=0;o<r[0].length;++o){let t=[];for(let n=r.length-1;n>0;--n)r[n][o]&&r[n+1]&&r[n][o]===r[n+1][o]?(1===e&&t.push([o,n+1]),e++,console.log(e),t.push([o,n])):(e>3&&(console.log("4 chain!"),console.log(t),l=l.concat(t),console.log(l)),e=1,t=[]),0===n&&e>3&&(console.log("4 chain!"),console.log(t),l=l.concat(t))}for(let o=r.length-1;o>0;--o){let t=[];for(let n=0;n<r[o].length;++n)r[o][n]&&r[o][n-1]&&r[o][n]===r[o][n-1]?(1===e&&t.push([n-1,o]),e++,t.push([n,o])):(e>3&&(console.log("4 chain!"),console.log(t),l=l.concat(t)),e=1,t=[]),n===r[o].length-1&&e>3&&(console.log("4 chain!"),console.log(t),l=l.concat(t))}bottleClearSection(l)}),pillColor=(()=>{const e=["red","yellow","blue"];return e[Math.random()*e.length|0]}),pillCreate=(()=>{return[[pillColor(),0],[pillColor(),0]]});const p={pos:{x:a,y:i},pill:pillCreate(),score:0};draw=(()=>{t.fillStyle="#000",t.fillRect(0,0,o.width,o.height),t.fillStyle="#55f",t.fillRect(0+n,0+c,8,16),t.fillStyle="#55f",t.fillRect(a+n,i+c-1,2,1),drawMatrix(r,{x:0,y:0}),drawMatrix(p.pill,p.pos)}),drawMatrix=((e,l)=>{e.forEach((e,o)=>{e.forEach((e,r)=>{0!==e&&(t.fillStyle=e,t.fillRect(r+l.x+n,o+l.y+c,1,1))})})}),_merge=((e,l)=>{l.pill.forEach((o,t)=>{o.forEach((o,r)=>{0!==o&&(e[t+l.pos.y][r+l.pos.x]=o)})})}),_collide=((e,l)=>{const[o,t]=[l.pill,l.pos];for(let l=0;l<o.length;++l)for(let r=0;r<o[l].length;++r)if(0!==o[l][r]&&0!==(e[l+t.y]&&e[l+t.y][r+t.x]))return!0;return!1});let s=0,f=0;pillNew=(()=>{p.pill=pillCreate(),p.pos={x:a,y:i},_collide(r,p)&&bottleNew()}),pillDrop=(()=>{p.pos.y++,_collide(r,p)&&(p.pos.y--,_merge(r,p),bottleCheck(r),pillNew(),playerScore()),s=0}),gameLoop=((e=0)=>{const l=e-f;f=e,(s+=l)>500&&pillDrop(),draw(),requestAnimationFrame(gameLoop)}),playerMove=(e=>{p.pos.x+=e,_collide(r,p)&&(p.pos.x-=e)}),pillRotate=((e,l)=>{for(let l=0;l<e.length;++l)for(let o=0;o<l;++o)[e[o][l],e[l][o]]=[e[l][o],e[o][l]];l>0?e.forEach(e=>e.reverse()):e.reverse()}),playerRotate=(e=>{const l=p.pos.x;let o=-1;for(pillRotate(p.pill,e);_collide(r,p);)if(p.pos.x+=o,(o=-(o+(o>0?1:-1)))>p.pill[0].length)return pillRotate(p.pill,-e),void(p.pos.x=l)}),playerScore=(()=>{document.getElementById("score").innerText=p.score}),document.addEventListener("keydown",e=>{switch(e.code){case"ArrowLeft":playerMove(-1);break;case"ArrowRight":playerMove(1);break;case"ArrowDown":pillDrop();break;case"KeyD":playerRotate(-1);break;case"KeyF":playerRotate(1)}}),playerScore(),gameLoop()}]);
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/testing.js");
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "./src/assets/pill.js":
+/*!****************************!*\
+  !*** ./src/assets/pill.js ***!
+  \****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+class Pill {
+  constructor (context, position, colors, space) {
+    this.context = context
+    this.position = position
+    this.space = space
+    this.connected = true
+    const positionA = position
+    const positionB = { x: position.x + space, y: position.y }
+    this.colorA = colors[Math.random() * colors.length | 0]
+    this.colorB = colors[Math.random() * colors.length | 0]
+    this.pillA = new PillHalf(context, positionA, "left", this.colorA, space)
+    this.pillB = new PillHalf(context, positionB, "right", this.colorB, space)
+    // this.pillA = new PillPart(context, positionA, this.colorA, space)
+    // this.pillB = new PillPart(context, positionB, this.colorB, space)
+    // context, position, color, space
+  }
+
+  draw() {
+    this.pillA.draw()
+    this.pillB.draw()
+  }
+
+  move(direction) {
+    let [xa, ya] = [this.pillA.getPillPosition().x, this.pillA.getPillPosition().y]
+    let [xb, yb] = [this.pillB.getPillPosition().x, this.pillB.getPillPosition().y]
+    if (direction > 0) {
+      this.pillA.setPillPosition({ x: xa + this.space, y: ya })
+      this.pillB.setPillPosition({ x: xb + this.space, y: yb })
+    } else {
+      this.pillA.setPillPosition({ x: xa - this.space, y: ya })
+      this.pillB.setPillPosition({ x: xb - this.space, y: yb })
+    }
+  }
+
+  rotate(direction) {
+    if (direction > 0) {
+      switch (this.pillA.getPillOrientation()) {
+        case "left":                    //[0, 0]
+        this.pillA.setPillPosition({    //[A, B]
+          x: this.position.x, y: this.position.y - this.space
+        }).setPillOrientation("up")     //[A, 0]
+        this.pillB.setPillPosition({    //[B, 0]
+          x: this.position.x, y: this.position.y
+        }).setPillOrientation("down")
+        break
+        case "up":                      //[A, 0]
+        this.pillA.setPillPosition({    //[B, 0]
+          x: this.position.x + this.space, y: this.position.y
+        }).setPillOrientation("right")  //[0, 0]
+        this.pillB.setPillPosition({    //[B, A]
+          x: this.position.x, y: this.position.y
+        }).setPillOrientation("left")
+        break
+        case "right":                   //[0, 0]
+        this.pillA.setPillPosition({    //[B, A]
+          x: this.position.x, y: this.position.y
+        }).setPillOrientation("down")   //[B, 0]
+        this.pillB.setPillPosition({    //[A, 0]
+          x: this.position.x, y: this.position.y - this.space
+        }).setPillOrientation("up")
+        break
+        case "down":                    //[B, 0]
+        this.pillA.setPillPosition({    //[A, 0]
+          x: this.position.x, y: this.position.y
+        }).setPillOrientation("left")   //[0, 0]
+        this.pillB.setPillPosition({    //[A, B]
+          x: this.position.x + this.space, y: this.position.y
+        }).setPillOrientation("right")
+        break
+      }
+    } else {
+      switch (this.pillA.getPillOrientation()) {
+        case "left":                    //[0, 0]
+        this.pillA.setPillPosition({    //[A, B]
+          x: this.position.x, y: this.position.y
+        }).setPillOrientation("down")   //[B, 0]
+        this.pillB.setPillPosition({    //[A, 0]
+          x: this.position.x, y: this.position.y - this.space
+        }).setPillOrientation("up")
+        break
+        case "down":                    //[B, 0]
+        this.pillA.setPillPosition({    //[A, 0]
+          x: this.position.x + this.space, y: this.position.y
+        }).setPillOrientation("right")  //[0, 0]
+        this.pillB.setPillPosition({    //[B, A]
+          x: this.position.x, y: this.position.y
+        }).setPillOrientation("left")
+        break
+        case "right":                   //[0, 0]
+        this.pillA.setPillPosition({    //[B, A]
+          x: this.position.x, y: this.position.y - this.space
+        }).setPillOrientation("up")     //[A, 0]
+        this.pillB.setPillPosition({    //[B, 0]
+          x: this.position.x, y: this.position.y
+        }).setPillOrientation("down")
+        break
+        case "up":                      //[A, 0]
+        this.pillA.setPillPosition({    //[B, 0]
+          x: this.position.x, y: this.position.y
+        }).setPillOrientation("left")   //[0, 0]
+        this.pillB.setPillPosition({    //[A, B]
+          x: this.position.x + this.space, y: this.position.y
+        }).setPillOrientation("right")
+        break
+      }
+    }
+  }
+}
+
+
+class PillHalf {
+  constructor (context, position, orientation, color, space) {
+    this.context = context
+    this.position = position
+    this.orientation = orientation
+    this.color = color
+    this.attached = true
+    this.space = space
+  }
+
+  getPillAngle(orientation) {
+    switch (orientation) {
+      case "up": return -90
+      case "down": return 90
+      case "left": return 180
+      case "right": return 0
+    }
+  }
+
+  getPillOrientation() {
+    return this.orientation
+  }
+  
+  setPillOrientation(orientation) {
+    this.orientation = orientation
+    return this
+  }
+
+  getPillPosition() {
+    return this.position
+  }
+
+  setPillPosition(position) {
+    this.position = position
+    return this
+  }
+
+  draw() {
+    let x = this.position.x
+    let y = this.position.y
+    let space = this.space
+    let degrees = this.getPillAngle(this.orientation)
+    let curvature = .225  //affects corners of capsule
+    const lineWidth = this.space / 20
+    const offset = lineWidth / 2
+    this.context.fillStyle = this.color;
+    this.context.lineWidth = lineWidth;
+    this.context.strokeStyle = 'black';
+
+    this.context.save()
+      //rotate
+      this.context.translate(x + space / 2, y + space / 2)
+        this.context.rotate(Math.PI / 180 * degrees) // rotates clockwise
+      this.context.translate(-x - space / 2, -y - space / 2)
+      //render
+      this.context.beginPath();
+      this.context.moveTo(x, y + offset); // top left origin
+      this.context.lineTo(x + space / 2, y + offset);
+      this.context.bezierCurveTo(
+        x + space * (1 - curvature),
+        y + offset,  
+        x + space - offset,
+        y + offset + space * curvature,
+        x + space - offset,
+        y + space / 2
+      )
+      this.context.bezierCurveTo(
+        x + space - offset,
+        y + space - offset - space * curvature,
+        x + space * (1 - curvature),
+        y + space - offset,
+        x + space / 2,
+        y + space - offset
+      )
+      this.context.lineTo(x, y + space - offset)
+      this.context.closePath();
+      this.context.fill();
+      this.context.stroke();
+    this.context.restore()
+  }
+}
+
+class PillPart {
+  constructor(context, position, color, space) {
+    this.context = context
+    this.position = position
+    this.color = color
+    this.space = space
+  }
+
+  setPillPosition(position) {
+    this.position = position
+  }
+
+  draw(){
+    let x = this.position.x
+    let y = this.position.y
+    let space = this.space
+    const lineWidth = this.space / 20
+    const offset = lineWidth / 2
+    this.context.fillStyle = this.color;
+    this.context.lineWidth = lineWidth;
+    this.context.strokeStyle = 'black';
+    
+    this.context.beginPath();
+    this.context.arc(
+      x + space / 2,
+      y + space / 2,
+      space / 2 - offset,
+      0,
+      Math.PI * 2
+    )
+    this.context.closePath();
+    this.context.fill();
+    this.context.stroke();
+  }
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (Pill);
+
+/***/ }),
+
+/***/ "./src/testing.js":
+/*!************************!*\
+  !*** ./src/testing.js ***!
+  \************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _assets_pill__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./assets/pill */ "./src/assets/pill.js");
+
+
+
+const canvas = document.getElementById('zenny')
+const context = canvas.getContext('2d')
+
+const scaleUp = 5
+const size = 10
+context.scale(scaleUp, scaleUp)
+
+const colors = ['red','yellow','deepskyblue', 'green'] //temp
+
+
+const pill1 = new _assets_pill__WEBPACK_IMPORTED_MODULE_0__["default"](context, { x: 1 * size, y: 2 * size }, colors, size)
+const pill2 = new _assets_pill__WEBPACK_IMPORTED_MODULE_0__["default"](context, { x: 0 * size, y: 6 * size }, colors, size)
+const pill3 = new _assets_pill__WEBPACK_IMPORTED_MODULE_0__["default"](context, { x: 0 * size, y: 8 * size }, colors, size)
+
+pill1.draw()
+pill2.draw()
+pill3.draw()
+
+
+setTimeout(() => {
+  pill1.rotate(1)
+  pill1.draw()
+  setTimeout(() => {
+    pill1.move(1)
+    pill1.draw()
+    setTimeout(() => {
+      pill1.rotate(-1)
+      pill1.draw()
+      setTimeout(() => {
+        pill1.move(-1)
+        pill1.draw()
+      }, 1000)
+    }, 2000)
+  }, 1000)
+}, 1000)
+// pill1.rotate(1)
+// setTimeout(() => pill1.draw(), 2000)
+// pill1.rotate(1)
+// setTimeout(() => pill1.draw(), 1000)
+// pill1.rotate(1)
+// setTimeout(() => pill1.draw(), 1000)
+
+/***/ })
+
+/******/ });
 //# sourceMappingURL=bundle.js.map

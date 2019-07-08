@@ -10,6 +10,9 @@ class Pill {
     this.colorB = colors[Math.random() * colors.length | 0]
     this.pillA = new PillHalf(context, positionA, "left", this.colorA, space)
     this.pillB = new PillHalf(context, positionB, "right", this.colorB, space)
+    // this.pillA = new PillPart(context, positionA, this.colorA, space)
+    // this.pillB = new PillPart(context, positionB, this.colorB, space)
+    // context, position, color, space
   }
 
   draw() {

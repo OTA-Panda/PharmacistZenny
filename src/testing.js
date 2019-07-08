@@ -8,7 +8,7 @@ const scaleUp = 5
 const size = 10
 context.scale(scaleUp, scaleUp)
 
-const colors = ['red','yellow','deepskyblue'] //temp
+const colors = ['red','yellow','deepskyblue', 'green'] //temp
 
 
 const pill1 = new Pill(context, { x: 1 * size, y: 2 * size }, colors, size)
