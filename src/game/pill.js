@@ -6,12 +6,12 @@ class Pill {
     this.space = space
     this.connected = true
     this.active = true
-    const positionA = position
-    const positionB = { x: position.x + space, y: position.y }
+    this.positionA = position
+    this.positionB = { x: position.x + space, y: position.y }
     this.colorA = colors[Math.random() * colors.length | 0]
     this.colorB = colors[Math.random() * colors.length | 0]
-    this.pillA = new PillHalf(context, positionA, "left", this.colorA, space)
-    this.pillB = new PillHalf(context, positionB, "right", this.colorB, space)
+    this.pillA = new PillHalf(context, this.positionA, "left", this.colorA, space)
+    this.pillB = new PillHalf(context, this.positionB, "right", this.colorB, space)
     // this.pillA = new PillPart(context, positionA, this.colorA, space)
     // this.pillB = new PillPart(context, positionB, this.colorB, space)
     // context, position, color, space
@@ -22,25 +22,41 @@ class Pill {
     this.pillB.draw()
   }
   
-  collide() {
-
+  hasCollision() {
+    const [xa, ya, xb, yb] = this.getCoords()
+    return (this.board[xa][ya] !== 0 && this.board[xb][yb] !== 0)
   }
 
   drop() {
+    const [xa, ya, xb, yb] = this.getCoords()
+    this.pillA.setPillPosition({ x: xa, y: ya + this.space})
+    this.pillB.setPillPosition({ x: xb, y: yb + this.space})
+  }
 
+  land() {
+    const [xa, ya, xb, yb] = this.getCoords()
+    this.bottle.fillSpace(xa, ya)
+    this.bottle.fillSpace(xb, yb)
+  }
+
+  getCoords() {
+    return [
+      this.pillA.getPillPosition().x,
+      this.pillA.getPillPosition().y,
+      this.pillB.getPillPosition().x,
+      this.pillB.getPillPosition().y
+    ]
   }
 
   move(direction) {
     if (this.active) {
-      let [xa, ya] = [this.pillA.getPillPosition().x, this.pillA.getPillPosition().y]
-      let [xb, yb] = [this.pillB.getPillPosition().x, this.pillB.getPillPosition().y]
+      const [xa, ya, xb, yb] = this.getCoords()
       if (direction > 0) {
         this.pillA.setPillPosition({ x: xa + this.space, y: ya })
         this.pillB.setPillPosition({ x: xb + this.space, y: yb })
       } else {
         this.pillA.setPillPosition({ x: xa - this.space, y: ya })
         this.pillB.setPillPosition({ x: xb - this.space, y: yb })
-      
       }
     }
   }
