@@ -17,6 +17,15 @@ class Pill {
     // context, position, color, space
   }
 
+  getCoords() {
+    return [
+      this.pillA.getPillPosition().x,
+      this.pillA.getPillPosition().y,
+      this.pillB.getPillPosition().x,
+      this.pillB.getPillPosition().y
+    ]
+  }
+  
   draw() {
     this.pillA.draw()
     this.pillB.draw()
@@ -39,14 +48,6 @@ class Pill {
     this.bottle.fillSpace(xb, yb)
   }
 
-  getCoords() {
-    return [
-      this.pillA.getPillPosition().x,
-      this.pillA.getPillPosition().y,
-      this.pillB.getPillPosition().x,
-      this.pillB.getPillPosition().y
-    ]
-  }
 
   move(direction) {
     if (this.active) {
