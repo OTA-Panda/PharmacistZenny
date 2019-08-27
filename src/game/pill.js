@@ -19,10 +19,10 @@ class Pill {
 
   getCoords() {
     return [
-      this.pillA.getPillPosition().x,
-      this.pillA.getPillPosition().y,
-      this.pillB.getPillPosition().x,
-      this.pillB.getPillPosition().y
+      this.pillA.getPillPosition().x / this.space,
+      this.pillA.getPillPosition().y / this.space,
+      this.pillB.getPillPosition().x / this.space,
+      this.pillB.getPillPosition().y / this.space
     ]
   }
   
@@ -33,7 +33,7 @@ class Pill {
   
   hasCollision() {
     const [xa, ya, xb, yb] = this.getCoords()
-    return (this.board[xa][ya] !== 0 && this.board[xb][yb] !== 0)
+    return (this.bottle[xa][ya] !== 0 && this.bottle[xb][yb] !== 0)
   }
 
   drop() {
@@ -44,6 +44,7 @@ class Pill {
 
   land() {
     const [xa, ya, xb, yb] = this.getCoords()
+    console.log([xa, xb])
     this.bottle.fillSpace(xa, ya)
     this.bottle.fillSpace(xb, yb)
   }

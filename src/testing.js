@@ -13,7 +13,7 @@ const colors = ['red','yellow','deepskyblue', 'green'] //temp
 
 console.log(canvas)
 const bottle = new Bottle(context, size, 8, 16)
-bottle.fillSpace(15,1)
+bottle.fillSpace(15 * size, 1 * size)
 // console.table(bottle.field)
 
 const pill1 = new Pill(context, bottle.field, { x: 1 * size, y: 2 * size }, colors, size)
@@ -24,27 +24,27 @@ pill1.draw()
 pill2.draw()
 pill3.draw()
 
+console.log(pill1.hasCollision())
 
-setTimeout(() => {
-  pill1.rotate(1)
-  pill1.drop()
-  pill1.draw()
-  setTimeout(() => {
-    pill1.move(1)
-    pill1.draw()
-    setTimeout(() => {
-      pill1.rotate(-1)
-      pill1.draw()
-      setTimeout(() => {
-        pill1.move(-1)
-        pill1.draw()
-      }, 1000)
-    }, 2000)
-  }, 1000)
-}, 1000)
-// pill1.rotate(1)
-// setTimeout(() => pill1.draw(), 2000)
-// pill1.rotate(1)
-// setTimeout(() => pill1.draw(), 1000)
-// pill1.rotate(1)
-// setTimeout(() => pill1.draw(), 1000)
+// setTimeout(() => {
+//   pill1.rotate(1)
+//   pill1.drop()
+//   console.log(`pill1 pos: ${pill1.position.valueOf()}`)
+//   console.log(pill1.position)
+//   // pill1.land()
+//   console.table(bottle.field)
+//   pill1.draw()
+//   setTimeout(() => {
+//     pill1.move(1)
+//     pill1.draw()
+//     setTimeout(() => {
+//       pill1.rotate(-1)
+//       pill1.draw()
+//       setTimeout(() => {
+//         pill1.move(-1)
+//         pill1.draw()
+//       }, 1000)
+//     }, 2000)
+//   }, 1000)
+// }, 1000)
+

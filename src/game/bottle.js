@@ -1,6 +1,7 @@
 class Bottle {
   constructor(ctx, space, width, height) {
     this.ctx = ctx
+    this.space = space
     this.width = width
     this.height = height
     this.field = this.create()
@@ -15,7 +16,8 @@ class Bottle {
   }
 
   fillSpace(x, y) {
-    return this.field[x][y] = 1
+    console.log([x, y])
+    return this.field[x / this.space][y / this.space] = 1
   }
 }
 
