@@ -24,7 +24,7 @@ pill1.draw()
 pill2.draw()
 pill3.draw()
 // console.log(`pill1 position: ${(JSON.stringify(pill1.position))}`)
-console.log(pill1.hasCollision())
+console.log(`collision: ${pill1.hasCollision()}`)
 
 setTimeout(() => {
   pill1.rotate(1)
@@ -32,13 +32,13 @@ setTimeout(() => {
   setTimeout(() => {
     pill1.drop()
     pill1.draw()
-    console.log(pill1.hasCollision())
+    console.log(`collision: ${pill1.hasCollision()}`)
     console.log(`pill1 position: ${(JSON.stringify(pill1.position))}`)
     setTimeout(() => {
       // pill1.move(1)
       // pill1.drop()
       pill1.draw()
-      console.log(pill1.hasCollision())
+      console.log(`collision: ${pill1.hasCollision()}`)
       console.log(`pill1 position: ${(JSON.stringify(pill1.position))}`)
       setTimeout(() => {
         pill1.rotate(-1)
